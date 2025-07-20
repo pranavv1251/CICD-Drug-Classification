@@ -1,25 +1,38 @@
 name: Continuous Integration
+
 on:
   push:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
   workflow_dispatch:
-  
+
 permissions: write-all
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - uses: iterative/setup-cml@v2
-      - name: Install Packages
+
+      - name: Install Python Dependencies
         run: make install
-      - name: Format
+
+      - name: Code Format Check
         run: make format
-      - name: Train
+
+      - name: Train Model
         run: make train
-      - name: Evaluation
+
+      - name: Check outputs before eval
+        run: |
+          ls -lh Results
+          cat Results/metrics.txt || echo "metrics.txt missing"
+          ls Results/model_results.png || echo "model_results.png missing"
+
+      - name: Evaluation and Report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: make eval
