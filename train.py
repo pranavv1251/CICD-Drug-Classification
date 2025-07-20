@@ -16,9 +16,9 @@ drug_df = drug_df.sample(frac=1)
 print(drug_df.head(3))
 path = "Model/drug_pipeline.skops"
 # trusted = sio.get_untrusted_types(path)
-trusted_types = ['numpy.dtype']
-cat_col = [1,2,3]
-num_col = [0,4]
+trusted_types = ["numpy.dtype"]
+cat_col = [1, 2, 3]
+num_col = [0, 4]
 
 X = drug_df.drop("Drug", axis=1).values
 y = drug_df.Drug.values
@@ -50,7 +50,7 @@ print("Accuracy:", str(round(accuracy, 2) * 100) + "%", "F1:", round(f1, 2))
 
 with open("Results/metrics.txt", "w") as outfile:
     outfile.write(f"\nAccuracy = {round(accuracy, 2)}, F1 Score = {round(f1, 2)}.")
-    
+
 cm = confusion_matrix(y_test, predictions, labels=pipe.classes_)
 disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=pipe.classes_)
 disp.plot()
